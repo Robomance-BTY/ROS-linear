@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/taeshik/ROS-Linear/linear_ws/install/setup.sh
