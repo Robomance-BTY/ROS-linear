@@ -1,0 +1,8 @@
+prefix=/home/taeshik/ROS-Linear/linear_ws/install
+
+Name: linear
+Description: Description of linear
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

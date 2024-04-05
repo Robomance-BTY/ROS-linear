@@ -2,4 +2,4 @@
 source_root_dir = '/home/taeshik/ROS-Linear/linear_ws/src'
 whitelisted_packages = ''.split(';') if '' != '' else []
 blacklisted_packages = ''.split(';') if '' != '' else []
-underlay_workspaces = '/opt/ros/noetic'.split(';') if '/opt/ros/noetic' != '' else []
+underlay_workspaces = '/home/taeshik/ROS-Linear/linear_ws/devel;/opt/ros/noetic'.split(';') if '/home/taeshik/ROS-Linear/linear_ws/devel;/opt/ros/noetic' != '' else []

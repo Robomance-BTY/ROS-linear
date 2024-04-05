@@ -1,2 +1,2 @@
-
+linear
 -DCATKIN_DEVEL_PREFIX=/home/taeshik/ROS-Linear/linear_ws/devel -DCMAKE_INSTALL_PREFIX=/home/taeshik/ROS-Linear/linear_ws/install -G Unix Makefiles
