@@ -1,0 +1,16 @@
+linear:
+  book_storage:
+  - 0
+  - 2400
+  - 2400
+  - 4800
+  - 4800
+  - 7200
+  - 7200
+  - 9600
+  - 9600
+  - 12000
+  - 12000 
+  linear_current_position: 0
+  linear_status: false
+

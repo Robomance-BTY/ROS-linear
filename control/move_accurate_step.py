@@ -1,5 +1,13 @@
 import RPi.GPIO as GPIO
 import time 
+import argparse
+
+parser = argparse.ArgumentParser()
+
+parser.add_argument('dir', type=str)
+parser.add_argument('duration', type=int)
+
+args = parser.parse_args()
 
 DIR = 12
 STP = 16
@@ -10,29 +18,25 @@ GPIO.setmode(GPIO.BOARD)
 GPIO.setup(DIR, GPIO.OUT)
 GPIO.setup(STP, GPIO.OUT)
 GPIO.setup(ENA, GPIO.OUT)
-
-print("GPIO setup")
-
-duration = 1000
-steps = 0
-
+steps = 80 * args.duration
+print(round(steps))
 GPIO.output(ENA, GPIO.HIGH)
 time.sleep(1)
-GPIO.output(DIR, GPIO.LOW)
-	
-	
-
+if args.dir == 'f':
+	GPIO.output(DIR, GPIO.LOW)
+else:
+	GPIO.output(DIR, GPIO.HIGH)	
 try:
-	while True:
+	for _ in range(round(steps)):
 		GPIO.output(STP, GPIO.HIGH)
 		time.sleep(0.0005)
 		GPIO.output(STP, GPIO.LOW)
 		time.sleep(0.0005)
-		steps += 1
+
 except KeyboardInterrupt:
 	print("cleanup")
 	GPIO.cleanup()
-	print(steps)
+
 finally:
 	GPIO.cleanup()
 

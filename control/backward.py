@@ -20,7 +20,7 @@ GPIO.output(ENA, GPIO.HIGH)
 time.sleep(1)
 GPIO.output(DIR, GPIO.HIGH)
 speed = 0.0005
-	
+steps = 0	
 
 try:
 	while True:
@@ -28,11 +28,12 @@ try:
 		time.sleep(speed)
 		GPIO.output(STP, GPIO.LOW)
 		time.sleep(speed)
+		steps += 1
 
 except KeyboardInterrupt:
 	print("cleanup")
 	GPIO.cleanup()
-
+	print(steps)
 finally:
 	GPIO.cleanup()
 
