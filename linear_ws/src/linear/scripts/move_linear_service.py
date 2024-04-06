@@ -8,7 +8,7 @@ from linear.srv import MoveLinear, MoveLinearResponse
 DIR = 12
 STP = 16
 ENA = 22
-speed = 0.0005
+speed = 0.005
 
 def set_gpio():
     global DIR, STP, ENA
@@ -21,9 +21,8 @@ def set_gpio():
     GPIO.output(ENA, GPIO.HIGH)
 
 def move_linear(current_position, target_position):
-    global DIR, STP, ENA
-	global speed
-	steps = target_position - current_position
+    global DIR, STP, ENA, speed
+    steps = target_position - current_position
     direction = GPIO.HIGH if steps > 0 else GPIO.LOW
     steps = abs(steps)
     GPIO.output(DIR, direction)
@@ -37,14 +36,14 @@ def move_linear(current_position, target_position):
     rospy.set_param('/linear/current_position', target_position)
 
 def unknown_command_handler():
-	return "unknown_command"
+    return "unknown_command"
 
 def handle_move_linear(req):
-   	command = req.command
+    command = req.command
     book_storage = rospy.get_param("/linear/book_storage")
     current_position = rospy.get_param("/linear/current_position")
-	command_handlers = {
-		'drawing_book_forward' : lambda: move_linear(current_position,-3000),
+    command_handlers = {
+        'drawing_book_forward' : lambda: move_linear(current_position,-3000),
 		'drawing_book_backward' : lambda: move_linear(current_position, 0),
 		'book_storage1' : lambda: move_linear(current_position, book_storage[1]),
 		'book_storage2' : lambda: move_linear(current_position, book_storage[2]),
@@ -56,23 +55,24 @@ def handle_move_linear(req):
 		'book_storage8' : lambda: move_linear(current_position, book_storage[8]),
 		'book_storage9' : lambda: move_linear(current_position, book_storage[9]),
 		'book_storage10' : lambda: move_linear(current_position, book_storage[10]),
-	try:
-        response_message = command_handlers.get(req.command, unknown_command_handler)()
-        return TriggerResponse(success=True, message=response_message)
+    }
+    try:
+        response_message = command_handlers.get(command, unknown_command_handler)()
+        return MoveLinearResponse(success=True, message=response_message)
     except Exception as e:
-        return TriggerResponse(success=False, message=str(e))
-
+        return MoveLinearResponse(success=False, message=str(e))
 
 def linear_service():
     rospy.init_node('linear_service')
-    s = rospy.Service('move_linear_service', MoveBook , handle_move_linear)
+    s = rospy.Service('move_linear_service', MoveLinear, handle_move_linear)
+    print("Linear service ready.")
     rospy.spin()
 
 if __name__ == '__main__':
     try:
         set_gpio()
         linear_service()
-    except KeyboardInterrupt:
-        GPIO.cleanup()
+    except rospy.ROSInterruptException:
+        pass
     finally:
         GPIO.cleanup()
