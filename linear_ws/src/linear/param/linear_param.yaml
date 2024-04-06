@@ -11,6 +11,6 @@ linear:
   - 9600
   - 12000
   - 12000 
-  linear_current_position: 0
-  linear_status: false
+  current_position: 0
+  status: false
 

@@ -3,8 +3,7 @@
 import rospy
 import RPi.GPIO as GPIO
 import time
-from std_msgs.msg import String
-from std_srvs.srv import Trigger, TriggerResponse
+from linear.srv import MoveLinear, MoveLinearResponse
 
 DIR = 12
 STP = 16
@@ -21,10 +20,10 @@ def set_gpio():
 
     GPIO.output(ENA, GPIO.HIGH)
 
-def drawing_book(target_position, speed):
+def move_linear(current_position, target_position):
     global DIR, STP, ENA
-    current_position = rospy.get_param("/linear/linear_current_position")
-    steps = target_position - current_position
+	global speed
+	steps = target_position - current_position
     direction = GPIO.HIGH if steps > 0 else GPIO.LOW
     steps = abs(steps)
     GPIO.output(DIR, direction)
@@ -35,26 +34,38 @@ def drawing_book(target_position, speed):
         GPIO.output(STP, GPIO.LOW)
         time.sleep(speed)
 
-    rospy.set_param('/linear/linear_current_position', target_position)
+    rospy.set_param('/linear/current_position', target_position)
 
-def handle_move_book(req):
-    global speed
+def unknown_command_handler():
+	return "unknown_command"
+
+def handle_move_linear(req):
+   	command = req.command
     book_storage = rospy.get_param("/linear/book_storage")
-    response_message = "Completed: "
-    try:
-        target_positions = [-3000, 0]
-        for pos in target_positions:
-            drawing_book(pos, speed)
-            time.sleep(1)
-            response_message += f"Moved to position {pos}. "
-        # 예시에서는 모든 요청을 'go'로 처리합니다. 필요에 따라 다른 로직을 추가할 수 있습니다.
+    current_position = rospy.get_param("/linear/current_position")
+	command_handlers = {
+		'drawing_book_forward' : lambda: move_linear(current_position,-3000),
+		'drawing_book_backward' : lambda: move_linear(current_position, 0),
+		'book_storage1' : lambda: move_linear(current_position, book_storage[1]),
+		'book_storage2' : lambda: move_linear(current_position, book_storage[2]),
+		'book_storage3' : lambda: move_linear(current_position, book_storage[3]),
+		'book_storage4' : lambda: move_linear(current_position, book_storage[4]),
+		'book_storage5' : lambda: move_linear(current_position, book_storage[5]),
+		'book_storage6' : lambda: move_linear(current_position, book_storage[6]),
+		'book_storage7' : lambda: move_linear(current_position, book_storage[7]),
+		'book_storage8' : lambda: move_linear(current_position, book_storage[8]),
+		'book_storage9' : lambda: move_linear(current_position, book_storage[9]),
+		'book_storage10' : lambda: move_linear(current_position, book_storage[10]),
+	try:
+        response_message = command_handlers.get(req.command, unknown_command_handler)()
         return TriggerResponse(success=True, message=response_message)
     except Exception as e:
         return TriggerResponse(success=False, message=str(e))
 
+
 def linear_service():
     rospy.init_node('linear_service')
-    s = rospy.Service('move_book_service', Trigger, handle_move_book)
+    s = rospy.Service('move_linear_service', MoveBook , handle_move_linear)
     rospy.spin()
 
 if __name__ == '__main__':
