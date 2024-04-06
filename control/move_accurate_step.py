@@ -5,7 +5,7 @@ import argparse
 parser = argparse.ArgumentParser()
 
 parser.add_argument('dir', type=str)
-parser.add_argument('duration', type=int)
+parser.add_argument('movement', type=int)
 
 args = parser.parse_args()
 
@@ -18,7 +18,7 @@ GPIO.setmode(GPIO.BOARD)
 GPIO.setup(DIR, GPIO.OUT)
 GPIO.setup(STP, GPIO.OUT)
 GPIO.setup(ENA, GPIO.OUT)
-steps = 80 * args.duration
+steps = 80 * args.movement
 print(round(steps))
 GPIO.output(ENA, GPIO.HIGH)
 time.sleep(1)
