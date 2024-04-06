@@ -3,6 +3,6 @@ prefix=/home/taeshik/ROS-Linear/linear_ws/devel
 Name: linear
 Description: Description of linear
 Version: 0.0.0
-Cflags: 
+Cflags: -I/home/taeshik/ROS-Linear/linear_ws/devel/include
 Libs: -L${prefix}/lib 
 Requires: 

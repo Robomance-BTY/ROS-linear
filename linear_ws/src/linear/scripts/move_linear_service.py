@@ -8,7 +8,7 @@ from linear.srv import MoveLinear, MoveLinearResponse
 DIR = 12
 STP = 16
 ENA = 22
-speed = 0.005
+speed = 0.0005
 
 def set_gpio():
     global DIR, STP, ENA
