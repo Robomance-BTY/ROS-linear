@@ -1,0 +1,5 @@
+<launch>
+	<node pkg="linear" type="move_linear_service.py" name="linear"/>
+
+	<rosparam file="$(find linear)/param/linear_param.yaml" command="load"/>
+</launch>
