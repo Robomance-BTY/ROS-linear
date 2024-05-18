@@ -55,6 +55,7 @@ def handle_move_linear(req):
 		'book_storage8' : lambda: move_linear(current_position, book_storage[8]),
 		'book_storage9' : lambda: move_linear(current_position, book_storage[9]),
 		'book_storage10' : lambda: move_linear(current_position, book_storage[10]),
+        'reset' : lambda: move_linear(current_position, book_storage[0])
     }
     try:
         response_message = command_handlers.get(command, unknown_command_handler)()
